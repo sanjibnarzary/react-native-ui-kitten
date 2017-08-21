@@ -1,8 +1,9 @@
-
 import React from 'react';
 
 import {
   Text,
+  Platform,
+  View,
 } from 'react-native';
 
 import {RkComponent} from '../rkComponent.js';
@@ -77,9 +78,36 @@ export class RkText extends RkComponent {
       color: 'color',
       backgroundColor: 'backgroundColor',
       fontSize: 'fontSize',
-      fontFamily: 'fontFamily'
+      fontFamily: 'fontFamily',
+      letterSpacing: 'letterSpacing'
     }
   };
+
+  minSpaceIndex = 1;
+
+  insertLetterSpacing(text, style, letterSpacing = 0) {
+    let spaceCount = Math.round(letterSpacing * this.minSpaceIndex);
+    // let wordsText = text.split(' ').map((value) => <View><Text>{value.split('').join('\u200A'.repeat(spaceCount))}</Text></View>).join();
+    let wordsText = <Text style={style}>{text.split('').join('\u200A'.repeat(spaceCount))}</Text>;
+    return (
+      <View style={{flexDirection: 'row'}}>
+        {text.map((value) =>
+          <View>
+            <Text>{value.split('').join('\u200A'.repeat(spaceCount))}
+            </Text>
+          </View>
+        )}
+      </View>
+    );
+  }
+
+  extractLetterSpacing(testStyle) {
+    let letterSpacing = 0;
+    testStyle.forEach((value, index) => {
+      if (value.letterSpacing) letterSpacing = (value.letterSpacing)
+    });
+    return letterSpacing;
+  }
 
   render() {
     let {
@@ -89,8 +117,23 @@ export class RkText extends RkComponent {
       ...textProps
     } = this.props;
     let styles = this.defineStyles(rkType);
+
+    let letterSpacing = (style && style.letterSpacing);
+    let needToInsertSpaces = Platform.OS === 'android' && letterSpacing;
+    let spaceCount = Math.round(letterSpacing * this.minSpaceIndex);
     return (
-      <Text style={[styles.text, style]} {...textProps}>{children}</Text>
+      <View style={{flexDirection: 'row', flexWrap: 'wrap', alignItems: 'flex-start'}}>
+        {
+          needToInsertSpaces
+            ? children.split(' ').map((value, index) =>
+              <Text key={index} style={[styles.text, style]} {...textProps}>
+                {value.split('').join('\u200A'.repeat(spaceCount))}
+                {'\u200A'.repeat(spaceCount)}&nbsp;{'\u200A'.repeat(spaceCount)}
+              </Text>
+            )
+            : <Text style={[styles.text, style]}>{children}</Text>
+        }
+      </View>
     );
   }
 }
