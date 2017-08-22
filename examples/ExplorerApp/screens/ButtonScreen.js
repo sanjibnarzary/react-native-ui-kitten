@@ -31,6 +31,11 @@ export class ButtonScreen extends Component {
       <ScrollView
         automaticallyAdjustContentInsets={true}
         style={UtilStyles.container}>
+        <RkText style={{fontSize: 30, letterSpacing: 1}}>
+          Start
+            Test Letter spacing test returning function true
+          Finishh
+        </RkText>
         <View style={[UtilStyles.section, UtilStyles.bordered]}>
           <RkText rkType='header'>Basic button</RkText>
           <View style={UtilStyles.rowContainer}>
@@ -108,17 +113,17 @@ export class ButtonScreen extends Component {
             </RkButton>
 
             <RkButton style={[{justifyContent: 'flex-start', paddingLeft: 0}, UtilStyles.spaceVertical]}>
-              <Icon style={[styles.icon,{marginHorizontal: 16, fontSize: 21}]} name={'facebook'}/>
+              <Icon style={[styles.icon, {marginHorizontal: 16, fontSize: 21}]} name={'facebook'}/>
               <RkText rkType='caption'>Facebook</RkText>
             </RkButton>
 
             <RkButton style={[{justifyContent: 'flex-start', paddingLeft: 0}, UtilStyles.spaceVertical]} rkType='info'>
-              <Icon style={[styles.icon,{marginHorizontal: 12, fontSize: 22}]} name={'twitter'}/>
+              <Icon style={[styles.icon, {marginHorizontal: 12, fontSize: 22}]} name={'twitter'}/>
               <RkText rkType='caption'>Twitter</RkText>
             </RkButton>
 
             <RkButton style={[styles.githubButton, UtilStyles.spaceTop]} rkType='info'>
-              <Icon style={[styles.icon,{marginHorizontal: 12, fontSize: 25}]} name={'github'}/>
+              <Icon style={[styles.icon, {marginHorizontal: 12, fontSize: 25}]} name={'github'}/>
               <RkText rkType='caption'>Github</RkText>
             </RkButton>
           </View>
@@ -131,30 +136,30 @@ export class ButtonScreen extends Component {
           </View>
           <View style={UtilStyles.rowContainer}>
             <RkButton style={[styles.iconButton, {marginLeft: 0}]}>
-              <Icon style={[styles.icon,{fontSize: 24,}]} name={'share-alt'}/>
+              <Icon style={[styles.icon, {fontSize: 24,}]} name={'share-alt'}/>
             </RkButton>
             <RkButton style={styles.iconButton}>
-              <Icon style={[styles.icon,{fontSize: 24}]} name={'envelope'}/>
+              <Icon style={[styles.icon, {fontSize: 24}]} name={'envelope'}/>
             </RkButton>
             <RkButton rkType='success' style={styles.iconButton}>
-              <Icon style={[styles.icon,{fontSize: 26}]} name={'plus'}/>
+              <Icon style={[styles.icon, {fontSize: 26}]} name={'plus'}/>
             </RkButton>
             <RkButton rkType='success circle' style={styles.circleIconButton}>
-              <Icon style={[styles.icon,{fontSize: 26}]} name={'plus'}/>
+              <Icon style={[styles.icon, {fontSize: 26}]} name={'plus'}/>
             </RkButton>
           </View>
           <View style={UtilStyles.rowContainer}>
             <RkButton rkType='outline' style={[styles.iconButton, {marginLeft: 0}]}>
-              <Icon style={[styles.primaryIcon,{fontSize: 24}]} name={'share-alt'}/>
+              <Icon style={[styles.primaryIcon, {fontSize: 24}]} name={'share-alt'}/>
             </RkButton>
             <RkButton rkType='outline' style={styles.iconButton}>
-              <Icon style={[styles.primaryIcon,{fontSize: 24}]} name={'envelope'}/>
+              <Icon style={[styles.primaryIcon, {fontSize: 24}]} name={'envelope'}/>
             </RkButton>
             <RkButton rkType='outline-success ' style={styles.iconButton}>
-              <Icon style={[styles.successIcon,{fontSize: 26}]} name={'plus'}/>
+              <Icon style={[styles.successIcon, {fontSize: 26}]} name={'plus'}/>
             </RkButton>
             <RkButton rkType='outline-success circle' style={[styles.circleIconButton]}>
-              <Icon style={[styles.successIcon,{fontSize: 26}]} name={'plus'}/>
+              <Icon style={[styles.successIcon, {fontSize: 26}]} name={'plus'}/>
             </RkButton>
           </View>
         </View>
@@ -163,7 +168,7 @@ export class ButtonScreen extends Component {
           <View style={UtilStyles.rowContainer}>
             <RkButton onPress={this._onPress} onLongPress={this._onLongPress} rkType='warning'>Push me!</RkButton>
             <View style={{paddingLeft: 24}}>
-              <RkText >Supported event props</RkText>
+              <RkText>Supported event props</RkText>
               <View style={{paddingTop: 8}}>
                 <RkText style={styles.textSpace} rkType='danger'>onPress</RkText>
                 <RkText style={styles.textSpace} rkType='danger'>onLongPress</RkText>
@@ -200,11 +205,11 @@ let styles = StyleSheet.create({
   icon: {
     color: 'white'
   },
-  primaryIcon:{
-    color:RkTheme.current.colors.primary
+  primaryIcon: {
+    color: RkTheme.current.colors.primary
   },
-  successIcon:{
-    color:RkTheme.current.colors.success
+  successIcon: {
+    color: RkTheme.current.colors.success
   },
   iconRound: {
     marginRight: 9,

@@ -4,6 +4,7 @@ import {
   Text,
   Platform,
   View,
+  StyleSheet,
 } from 'react-native';
 
 import {RkComponent} from '../rkComponent.js';
@@ -85,28 +86,14 @@ export class RkText extends RkComponent {
 
   minSpaceIndex = 1;
 
-  insertLetterSpacing(text, style, letterSpacing = 0) {
-    let spaceCount = Math.round(letterSpacing * this.minSpaceIndex);
-    // let wordsText = text.split(' ').map((value) => <View><Text>{value.split('').join('\u200A'.repeat(spaceCount))}</Text></View>).join();
-    let wordsText = <Text style={style}>{text.split('').join('\u200A'.repeat(spaceCount))}</Text>;
+  renderText(value, style, spaceCount) {
+    console.log(value + ' ' + ' ' + style + ' ' + spaceCount);
     return (
-      <View style={{flexDirection: 'row'}}>
-        {text.map((value) =>
-          <View>
-            <Text>{value.split('').join('\u200A'.repeat(spaceCount))}
-            </Text>
-          </View>
-        )}
-      </View>
+      <Text style={style}>
+        {value.split('').join('\u200A'.repeat(spaceCount))}
+        {'\u200A'.repeat(spaceCount)}&nbsp;{'\u200A'.repeat(spaceCount)}
+      </Text>
     );
-  }
-
-  extractLetterSpacing(testStyle) {
-    let letterSpacing = 0;
-    testStyle.forEach((value, index) => {
-      if (value.letterSpacing) letterSpacing = (value.letterSpacing)
-    });
-    return letterSpacing;
   }
 
   render() {
@@ -116,24 +103,36 @@ export class RkText extends RkComponent {
       children,
       ...textProps
     } = this.props;
-    let styles = this.defineStyles(rkType);
+    let rkStyles = this.defineStyles(rkType);
 
     let letterSpacing = (style && style.letterSpacing);
     let needToInsertSpaces = Platform.OS === 'android' && letterSpacing;
     let spaceCount = Math.round(letterSpacing * this.minSpaceIndex);
+    if (typeof children === 'string') {
+      children = [children];
+    }
+
     return (
-      <View style={{flexDirection: 'row', flexWrap: 'wrap', alignItems: 'flex-start'}}>
+      <View style={styles.textContainer}>
         {
           needToInsertSpaces
-            ? children.split(' ').map((value, index) =>
-              <Text key={index} style={[styles.text, style]} {...textProps}>
-                {value.split('').join('\u200A'.repeat(spaceCount))}
-                {'\u200A'.repeat(spaceCount)}&nbsp;{'\u200A'.repeat(spaceCount)}
-              </Text>
+            ? children.map(
+            (child) =>
+              (typeof child === 'string')
+                ? child.split(' ').map((value) => this.renderText(value, [rkStyles.text, style], spaceCount))
+                : child
             )
-            : <Text style={[styles.text, style]}>{children}</Text>
+            : <Text style={[rkStyles.text, style]}>{children}</Text>
         }
       </View>
     );
   }
 }
+
+let styles = StyleSheet.create({
+  textContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'flex-start'
+  },
+});
