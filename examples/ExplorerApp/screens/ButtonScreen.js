@@ -31,11 +31,6 @@ export class ButtonScreen extends Component {
       <ScrollView
         automaticallyAdjustContentInsets={true}
         style={UtilStyles.container}>
-        <RkText style={{fontSize: 30, letterSpacing: 1}}>
-          Start
-            Test Letter spacing test returning function true
-          Finishh
-        </RkText>
         <View style={[UtilStyles.section, UtilStyles.bordered]}>
           <RkText rkType='header'>Basic button</RkText>
           <View style={UtilStyles.rowContainer}>
