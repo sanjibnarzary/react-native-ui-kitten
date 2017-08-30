@@ -105,6 +105,15 @@ export class RkText extends RkComponent {
     'textDecorationColor', 'writingDirection',
   ];
 
+  clearStyleProperty(key, style, rkStyles){
+    style && delete style[key];
+    rkStyles && rkStyles.text && delete rkStyles.text[key];
+  }
+
+  extractStyleValue(key, style, rkStyles) {
+    return (style && style[key]) || (rkStyles && rkStyles.text && rkStyles.text[key])
+  }
+
   directTextProps(textProps) {
     let complexProps = {wrapProps: {}, textProps: {}};
     for (let key in textProps) {
@@ -145,13 +154,12 @@ export class RkText extends RkComponent {
     );
   }
 
-  _renderNestedText(child, textStyles, textProps){
+  _renderNestedText(child, textStyles, textProps) {
     return <Text style={textStyles} {...textProps}>{child}</Text>
   }
 
   _renderTextWithSpacing(children, stylesArray, spaceCount, textProps) {
     let textChildren = typeof children === 'string' ? [children] : children;
-    console.log(textChildren);
     let complexStyles = this.directTextStyles(stylesArray);
     let complexProps = this.directTextProps(textProps);
     return (
@@ -178,10 +186,12 @@ export class RkText extends RkComponent {
       ...textProps
     } = this.props;
     let rkStyles = this.defineStyles(rkType);
-    let letterSpacing = ((style && style.letterSpacing) || (rkStyles && rkStyles.text.letterSpacing));
-    let needToInsertSpaces = Platform.OS === 'android' && letterSpacing;
-    let spaceCount = Math.round(letterSpacing * this.minSpaceIndex);
+    let letterSpacing = this.extractStyleValue('letterSpacing', style, rkStyles);
+    let useAndroidLetterSpacing = this.extractStyleValue('useAndroidLetterSpacing', style, rkStyles);
+    let needToInsertSpaces = Platform.OS === 'android' && letterSpacing && useAndroidLetterSpacing;
+    if (needToInsertSpaces) this.clearStyleProperty('useAndroidLetterSpacing', style, rkStyles);
 
+    let spaceCount = Math.round(letterSpacing * this.minSpaceIndex);
     let textContent = needToInsertSpaces
       ? this._renderTextWithSpacing(children, [rkStyles.text, style], spaceCount, textProps)
       : this._renderText(children, [rkStyles.text, style], textProps);
