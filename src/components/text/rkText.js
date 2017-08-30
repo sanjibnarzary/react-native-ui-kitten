@@ -49,6 +49,7 @@ import {RkComponent} from '../rkComponent.js';
  * - `color` : Color of text
  * - `backgroundColor` : Background color of `RkText`
  * - `fontSize` : Font size of text
+ * - `letterSpacing` : specifies the spacing behavior between text characters. React native supports letter spacing only for iOS. For Android you can use our custom letter spacing if you additionally set `useAndroidLetterSpacing` to `true`
  *
  * @example Advanced Styling
  *
