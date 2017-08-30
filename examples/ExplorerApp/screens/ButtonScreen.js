@@ -32,6 +32,10 @@ export class ButtonScreen extends Component {
         automaticallyAdjustContentInsets={true}
         style={UtilStyles.container}>
         <View style={[UtilStyles.section, UtilStyles.bordered]}>
+          <RkText style={{fontSize: 20, letterSpacing: 5}} selectionColor='red' selectable={true}>Test letter spacing typeof function return else async constructor</RkText>
+        </View>
+
+        <View style={[UtilStyles.section, UtilStyles.bordered]}>
           <RkText rkType='header'>Basic button</RkText>
           <View style={UtilStyles.rowContainer}>
             <RkText>Just create button element with text inside.</RkText>

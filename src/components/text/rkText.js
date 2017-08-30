@@ -74,6 +74,7 @@ import {RkComponent} from '../rkComponent.js';
 
 export class RkText extends RkComponent {
   componentName = 'RkText';
+  minSpaceIndex = 1;
   typeMapping = {
     text: {
       color: 'color',
@@ -83,16 +84,85 @@ export class RkText extends RkComponent {
       letterSpacing: 'letterSpacing'
     }
   };
+  textProps = [
+    'ellipsizeMode', 'numberOfLines',
+    'textBreakStrategy', 'onPress',
+    'onLongPress', 'pressRetentionOffset',
+    'selectable', 'selectionColor',
+    'suppressHighlighting', 'allowFontScaling',
+    'adjustsFontSizeToFit', 'minimumFontScale',
+    'disabled'
+  ];
+  textStylesProps = [
+    'color', 'fontFamily',
+    'fontSize', 'fontStyle',
+    'fontWeight', 'fontVariant',
+    'textShadowOffset', 'textShadowRadius',
+    'textShadowColor', 'letterSpacing',
+    'lineHeight', 'textAlign',
+    'textAlignVertical', 'includeFontPadding',
+    'textDecorationLine', 'textDecorationStyle',
+    'textDecorationColor', 'writingDirection',
+  ];
 
-  minSpaceIndex = 1;
+  directTextProps(textProps) {
+    let complexProps = {wrapProps: {}, textProps: {}};
+    for (let key in textProps) {
+      this.textProps.includes(key)
+        ? complexProps.textProps[key] = textProps[key]
+        : complexProps.wrapProps[key] = textProps[key];
+    }
+    console.log(complexProps);
+    return complexProps;
+  }
 
-  renderText(value, style, spaceCount) {
-    console.log(value + ' ' + ' ' + style + ' ' + spaceCount);
+  directTextStyles(stylesArray) {
+    let styleKey, styleValue;
+    let complexStyles = {wrapStyles: {}, textStyles: {}};
+    stylesArray.forEach((value) => {
+      for (let key in value) {
+        styleKey = typeof value[key] === 'object' ? Object.keys(value[key])[0] : key;
+        styleValue = typeof value[key] === 'object' ? value[key][styleKey] : value[key];
+        this.textStylesProps.includes(styleKey)
+          ? complexStyles.textStyles[styleKey] = styleValue
+          : complexStyles.wrapStyles[styleKey] = styleValue;
+      }
+    });
+    return complexStyles;
+  }
+
+  _renderText(children, stylesArray, textProps) {
     return (
-      <Text style={style}>
+      <Text style={stylesArray} {...textProps}>{children}</Text>
+    );
+  }
+
+  _renderWord(value, spaceCount, textStyles, textProps) {
+    return (
+      <Text style={textStyles} {...textProps}>
         {value.split('').join('\u200A'.repeat(spaceCount))}
         {'\u200A'.repeat(spaceCount)}&nbsp;{'\u200A'.repeat(spaceCount)}
       </Text>
+    );
+  }
+
+  _renderTextWithSpacing(children, stylesArray, spaceCount, textProps) {
+    let textChildren = typeof children === 'string' ? [children] : children;
+    let complexStyles = this.directTextStyles(stylesArray);
+    let complexProps = this.directTextProps(textProps);
+    return (
+      <View style={[styles.textContainer, complexStyles.wrapStyles]} {...complexProps.wrapProps}>
+        {
+          textChildren.map(
+            (child) =>
+              (typeof child === 'string')
+                ? child.split(' ').map(
+                (value) => this._renderWord(value, spaceCount, complexStyles.textStyles, complexProps.textProps)
+                )
+                : child
+          )
+        }
+      </View>
     );
   }
 
@@ -104,28 +174,14 @@ export class RkText extends RkComponent {
       ...textProps
     } = this.props;
     let rkStyles = this.defineStyles(rkType);
-
-    let letterSpacing = (style && style.letterSpacing);
+    let letterSpacing = ((style && style.letterSpacing) || (rkStyles && rkStyles.text.letterSpacing));
     let needToInsertSpaces = Platform.OS === 'android' && letterSpacing;
     let spaceCount = Math.round(letterSpacing * this.minSpaceIndex);
-    if (typeof children === 'string') {
-      children = [children];
-    }
 
-    return (
-      <View style={styles.textContainer}>
-        {
-          needToInsertSpaces
-            ? children.map(
-            (child) =>
-              (typeof child === 'string')
-                ? child.split(' ').map((value) => this.renderText(value, [rkStyles.text, style], spaceCount))
-                : child
-            )
-            : <Text style={[rkStyles.text, style]}>{children}</Text>
-        }
-      </View>
-    );
+    let textContent = needToInsertSpaces
+      ? this._renderTextWithSpacing(children, [rkStyles.text, style], spaceCount, textProps)
+      : this._renderText(children, [rkStyles.text, style], textProps);
+    return textContent;
   }
 }
 
