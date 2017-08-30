@@ -112,7 +112,6 @@ export class RkText extends RkComponent {
         ? complexProps.textProps[key] = textProps[key]
         : complexProps.wrapProps[key] = textProps[key];
     }
-    console.log(complexProps);
     return complexProps;
   }
 
@@ -146,20 +145,25 @@ export class RkText extends RkComponent {
     );
   }
 
+  _renderNestedText(child, textStyles, textProps){
+    return <Text style={textStyles} {...textProps}>{child}</Text>
+  }
+
   _renderTextWithSpacing(children, stylesArray, spaceCount, textProps) {
     let textChildren = typeof children === 'string' ? [children] : children;
+    console.log(textChildren);
     let complexStyles = this.directTextStyles(stylesArray);
     let complexProps = this.directTextProps(textProps);
     return (
       <View style={[styles.textContainer, complexStyles.wrapStyles]} {...complexProps.wrapProps}>
         {
           textChildren.map(
-            (child) =>
+            (child, index) =>
               (typeof child === 'string')
                 ? child.split(' ').map(
                 (value) => this._renderWord(value, spaceCount, complexStyles.textStyles, complexProps.textProps)
                 )
-                : child
+                : this._renderNestedText(child, complexStyles.textStyles, complexProps.textProps)
           )
         }
       </View>
