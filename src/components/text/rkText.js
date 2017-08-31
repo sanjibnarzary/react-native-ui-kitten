@@ -76,6 +76,8 @@ import {RkComponent} from '../rkComponent.js';
 export class RkText extends RkComponent {
   componentName = 'RkText';
   minSpaceIndex = 1;
+  spaceChar = '\u200A';
+  wordDiveder = ' ';
   typeMapping = {
     text: {
       color: 'color',
@@ -106,7 +108,7 @@ export class RkText extends RkComponent {
     'textDecorationColor', 'writingDirection',
   ];
 
-  clearStyleProperty(key, style, rkStyles){
+  clearStyleProperty(key, style, rkStyles) {
     style && delete style[key];
     rkStyles && rkStyles.text && delete rkStyles.text[key];
   }
@@ -149,8 +151,8 @@ export class RkText extends RkComponent {
   _renderWord(value, spaceCount, textStyles, textProps) {
     return (
       <Text style={textStyles} {...textProps}>
-        {value.split('').join('\u200A'.repeat(spaceCount))}
-        {'\u200A'.repeat(spaceCount)}&nbsp;{'\u200A'.repeat(spaceCount)}
+        {value.split('').join(this.spaceChar.repeat(spaceCount))}
+        {this.spaceChar.repeat(spaceCount)}{this.wordDiveder}{this.spaceChar.repeat(spaceCount)}
       </Text>
     );
   }
@@ -170,7 +172,7 @@ export class RkText extends RkComponent {
             (child, index) =>
               (typeof child === 'string')
                 ? child.split(' ').map(
-                (value) => this._renderWord(value, spaceCount, complexStyles.textStyles, complexProps.textProps)
+                  (value) => this._renderWord(value, spaceCount, complexStyles.textStyles, complexProps.textProps)
                 )
                 : this._renderNestedText(child, complexStyles.textStyles, complexProps.textProps)
           )
@@ -190,7 +192,8 @@ export class RkText extends RkComponent {
     let letterSpacing = this.extractStyleValue('letterSpacing', style, rkStyles);
     let useAndroidLetterSpacing = this.extractStyleValue('useAndroidLetterSpacing', style, rkStyles);
     let needToInsertSpaces = Platform.OS === 'android' && letterSpacing && useAndroidLetterSpacing;
-    if (needToInsertSpaces) this.clearStyleProperty('useAndroidLetterSpacing', style, rkStyles);
+    if (needToInsertSpaces)
+      this.clearStyleProperty('useAndroidLetterSpacing', style, rkStyles);
 
     let spaceCount = Math.round(letterSpacing * this.minSpaceIndex);
     let textContent = needToInsertSpaces
