@@ -1,0 +1,41 @@
+{
+  "extends": [
+    "airbnb",
+    "last",
+    "prettier/react",
+    "plugin:react/recommended"
+  ],
+  "parser": "babel-eslint",
+  "rules": {
+    "react/jsx-filename-extension": [
+      "error",
+      {
+        "extensions": [
+          ".js"
+        ]
+      }
+    ],
+    "global-require": "off",
+    "import/extensions": {
+      "js": "never",
+      "json": "never"
+    },
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": true,
+        "optionalDependencies": true,
+        "peerDependencies": true
+      }
+    ],
+    "import/no-unresolved": [
+      "error",
+      {
+        "ignore": [
+          "react$",
+          "react-native$"
+        ]
+      }
+    ]
+  }
+}

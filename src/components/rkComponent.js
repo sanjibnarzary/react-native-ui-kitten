@@ -1,23 +1,24 @@
 import React from 'react';
-import {Platform} from 'react-native';
+import { Platform } from 'react-native';
 import _ from 'lodash';
-import {TypeManager} from '../styles/typeManager.js';
-import {RkTheme} from '../styles/themeManager.js';
+import { TypeManager } from '../styles/typeManager.js';
+import { RkTheme } from '../styles/themeManager.js';
 
 /**
  * `RkComponent` is base component for all components in `react-native-ui-kitten` library
- * This component includes core logic for stylization and theming. All themable components should extend this component.
+ * This component includes core logic for stylization and theming.
+ * All themable components should extend this component.
  * @extends React.Component
  */
-export class RkComponent extends React.Component {
-
+export default class RkComponent extends React.Component {
   /**
    * {string} Name of component. Should be overridden in inherited component.
    */
   componentName = '';
 
   /**
-   * {object} Mapping which used for defining predefined properties such as `color` in `RkButton`. Can be overridden in inherited component
+   * {object} Mapping which used for defining predefined properties such as `color` in `RkButton`.
+   * Can be overridden in inherited component
    */
   typeMapping = {};
 
@@ -43,9 +44,13 @@ export class RkComponent extends React.Component {
    * @returns {object} styles - Object with compiled styles for each internal component.
    */
   defineStyles(additionalTypes) {
-    let rkTypes = this._getTypesString(this.props.rkType || '');
+    const rkTypes = this._getTypesString(this.props.rkType || '');
     additionalTypes = this._getTypesString(additionalTypes);
-    let types = this._getTypesString([this.defaultType, rkTypes, additionalTypes]);
+    let types = this._getTypesString([
+      this.defaultType,
+      rkTypes,
+      additionalTypes,
+    ]);
     types = types && types.length ? types.split(' ') : [];
     return this._getTypes(types);
   }
@@ -60,7 +65,7 @@ export class RkComponent extends React.Component {
    * @returns {object} value of extracted property
    */
   extractNonStyleValue(style, property) {
-    let val = _.find(style, (e) => e.hasOwnProperty(property));
+    const val = _.find(style, e => e.hasOwnProperty(property));
     if (val) {
       style.splice(style.indexOf(val), 1);
     } else {
@@ -90,41 +95,45 @@ export class RkComponent extends React.Component {
 
   _getTypes(rkTypes) {
     let usedTypes = this._getUsedTypes(rkTypes);
-    let componentTypes = TypeManager.types(RkTheme.current)[this.componentName] || [];
-    let styles = {};
-    let baseStyle = componentTypes[this.baseStyle];
+    const componentTypes =
+      TypeManager.types(RkTheme.current)[this.componentName] || [];
+    const styles = {};
+    const baseStyle = componentTypes[this.baseStyle];
 
     if (baseStyle) {
       usedTypes = [baseStyle, ...usedTypes];
     }
 
-    usedTypes.forEach((usedType) => {
-      for (let key in usedType) {
+    usedTypes.forEach(usedType => {
+      for (const key in usedType) {
         if (this.typeMapping.hasOwnProperty(key)) {
           this.fillElementStyles(styles, key, usedType[key]);
         } else {
-          let element = this.findTypeMappingElementByKey(key, this.typeMapping)
-            || this.defaultTypeMappingElement || _.keys(this.typeMapping)[0];
+          const element =
+            this.findTypeMappingElementByKey(key, this.typeMapping) ||
+            this.defaultTypeMappingElement ||
+            _.keys(this.typeMapping)[0];
           this.fillElementStyle(styles, element, key, usedType[key]);
         }
       }
     });
 
     return styles;
-  };
+  }
 
   fillElementStyle(styles, element, key, value) {
     this.createStyleIfNotExists(styles, element);
     let styleKey = this.typeMapping[element][key];
-    if (!styleKey)
+    if (!styleKey) {
       styleKey = key;
-    let styleValue = this._getStyleValue(value);
+    }
+    const styleValue = this._getStyleValue(value);
     this._mergeStyles(styles[element], styleKey, styleValue);
   }
 
   fillElementStyles(styles, element, value) {
-    for (let styleKey in value) {
-      this.fillElementStyle(styles, element, styleKey, value[styleKey])
+    for (const styleKey in value) {
+      this.fillElementStyle(styles, element, styleKey, value[styleKey]);
     }
   }
 
@@ -134,7 +143,7 @@ export class RkComponent extends React.Component {
 
   findTypeMappingElementByKey(key, typeMapping) {
     let resultComplexStyle;
-    for (let complexStyle in typeMapping) {
+    for (const complexStyle in typeMapping) {
       if (typeMapping[complexStyle].hasOwnProperty(key)) {
         resultComplexStyle = complexStyle;
         break;
@@ -144,20 +153,23 @@ export class RkComponent extends React.Component {
   }
 
   _mergeStyles(element, styleKey, value) {
-    //merge styles in order to have only one value for each property
-    let index = _.findIndex(element, (e) => e.hasOwnProperty(styleKey));
-    if (index >= 0)
+    // merge styles in order to have only one value for each property
+    const index = _.findIndex(element, e => e.hasOwnProperty(styleKey));
+    if (index >= 0) {
       element[index][styleKey] = value;
-    else
-      element.push({[styleKey]: value});
+    } else {
+      element.push({ [styleKey]: value });
+    }
   }
 
   _getUsedTypes(rkTypes) {
-    let usedTypes = [];
-    let componentTypes = TypeManager.types(RkTheme.current)[this.componentName] || [];
+    const usedTypes = [];
+    const componentTypes =
+      TypeManager.types(RkTheme.current)[this.componentName] || [];
     rkTypes.forEach(type => {
-      if (componentTypes[type])
+      if (componentTypes[type]) {
         usedTypes.push(componentTypes[type]);
+      }
     });
     return usedTypes;
   }

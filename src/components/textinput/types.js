@@ -1,37 +1,37 @@
-export const RkTextInputTypes = (theme) => {
-  return ({
+export const RkTextInputTypes = theme => {
+  return {
     _base: {
       input: {
         flex: 1,
         fontSize: theme.fonts.sizes.base,
         height: {
           ios: theme.fonts.sizes.base * 1.42,
-          android: undefined
+          android: undefined,
         },
         alignSelf: 'center',
         marginVertical: {
           ios: 18,
-          android: 4
+          android: 4,
         },
-        marginLeft: 16
+        marginLeft: 16,
       },
       container: {
         flexDirection: 'row',
         borderBottomWidth: 0.5,
         borderBottomColor: theme.colors.border.base,
-        marginVertical: 9
+        marginVertical: 9,
       },
       label: {
         fontSize: theme.fonts.sizes.base,
         alignSelf: 'center',
-      }
+      },
     },
     basic: {
       backgroundColor: 'transparent',
       inputBackgroundColor: 'transparent',
       color: theme.colors.input.text,
       labelColor: theme.colors.input.label,
-      placeholderTextColor: theme.colors.input.placeholder
+      placeholderTextColor: theme.colors.input.placeholder,
     },
 
     bordered: {
@@ -58,7 +58,7 @@ export const RkTextInputTypes = (theme) => {
         height: 50,
         marginVertical: 0,
         paddingLeft: 14,
-        marginLeft: 13
+        marginLeft: 13,
       },
       label: {
         flexDirection: 'column',
@@ -66,20 +66,20 @@ export const RkTextInputTypes = (theme) => {
       },
       container: {
         flexDirection: 'row',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
       },
-      underlineWidth: 0
+      underlineWidth: 0,
     },
     clear: {
-      underlineWidth: 0
+      underlineWidth: 0,
     },
     topLabel: {
       input: {
         alignSelf: 'stretch',
         marginVertical: {
           android: 2,
-          ios: 14
-        }
+          ios: 14,
+        },
       },
       container: {
         flexDirection: 'column',
@@ -87,8 +87,8 @@ export const RkTextInputTypes = (theme) => {
       },
       label: {
         fontSize: theme.fonts.sizes.small,
-        alignSelf: 'flex-start'
-      }
+        alignSelf: 'flex-start',
+      },
     },
-  });
+  };
 };

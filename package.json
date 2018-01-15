@@ -6,7 +6,9 @@
   "homepage": "https://akveo.github.io/react-native-ui-kitten/",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "yarn eslint .",
+    "lint:fix": "yarn lint --fix"
   },
   "license": "MIT",
   "dependencies": {
@@ -19,5 +21,31 @@
   },
   "bugs": {
     "url": "https://github.com/akveo/react-native-ui-kitten/issues"
+  },
+  "prettier": {
+    "jsxBracketSameLine": true
+  },
+  "devDependencies": {
+    "babel-eslint": "8.2.1",
+    "cz-conventional-changelog": "^2.1.0",
+    "eslint": "4.15.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-last": "0.0.5",
+    "eslint-config-prettier": "2.9.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-prettier": "2.4.0",
+    "eslint-plugin-react": "^7.5.1",
+    "prettier": "1.10.2"
+  },
+  "peerDependencies": {
+    "lodash": "^4.17.4",
+    "react": "^16.0.0",
+    "react-native": "^0.50"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }

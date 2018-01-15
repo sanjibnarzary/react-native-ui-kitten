@@ -5,8 +5,8 @@ import {
 } from 'react-native';
 import _ from 'lodash';
 
-import {RkText} from '../text/rkText';
-import {RkComponent} from '../rkComponent'
+import { RkText } from '../text/rkText';
+import { RkComponent } from '../rkComponent';
 
 /**
  * `RkButton` is a basic button component.
@@ -124,50 +124,49 @@ import {RkComponent} from '../rkComponent'
  * @property {TouchableOpacity.props} props - All `TouchableOpacity` props also applied to `RkButton`
  */
 
-export class RkButton extends RkComponent {
+export default class RkButton extends RkComponent {
   componentName = 'RkButton';
   typeMapping = {
     container: {
-      hitSlop: 'hitSlop'
+      hitSlop: 'hitSlop',
     },
     content: {
       color: 'color',
-      fontSize: 'fontSize'
-    }
+      fontSize: 'fontSize',
+    },
   };
 
   static contextTypes = {
-    theme: PropTypes.object
+    theme: PropTypes.object,
   };
 
-  _renderChildren(style) {
-    let displayText = (text) => (<RkText style={[style, this.props.contentStyle]}>{text}</RkText>);
+  renderChildren(style) {
+    const displayText = text => (<RkText style={[style, this.props.contentStyle]}>{text}</RkText>);
     if (typeof this.props.children === 'string') {
-      return displayText(this.props.children)
+      return displayText(this.props.children);
     }
-    let babies = _.isArray(this.props.children) ? this.props.children : [this.props.children];
+    const babies = _.isArray(this.props.children) ? this.props.children : [this.props.children];
     return React.Children.map(babies, (baby) => {
       if (typeof baby === 'string') {
         return displayText(baby);
-      } else {
-        let {style: babyStyle, ...babyProps} = baby.props;
-        return React.cloneElement(baby, {
-          style: [this.props.contentStyle, babyStyle],
-          ...babyProps
-        });
       }
-    })
+      const { style: babyStyle, ...babyProps } = baby.props;
+      return React.cloneElement(baby, {
+        style: [this.props.contentStyle, babyStyle],
+        ...babyProps,
+      });
+    });
   }
 
   render() {
-    let {container, content} = super.defineStyles();
-    let {style, ...touchableProps} = this.props;
-    let hitSlop = this.extractNonStyleValue(container, 'hitSlop');
+    const { container, content } = super.defineStyles();
+    const { style, ...touchableProps } = this.props;
+    const hitSlop = this.extractNonStyleValue(container, 'hitSlop');
     if (hitSlop) touchableProps.hitSlop = hitSlop;
 
     return (
       <TouchableOpacity style={[container, style]} {...touchableProps}>
-        {this.props.children && this._renderChildren(content)}
+        {this.props.children && this.renderChildren(content)}
       </TouchableOpacity>
     );
   }

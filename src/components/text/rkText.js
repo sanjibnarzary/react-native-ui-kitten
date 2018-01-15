@@ -1,11 +1,6 @@
-
 import React from 'react';
-
-import {
-  Text,
-} from 'react-native';
-
-import {RkComponent} from '../rkComponent.js';
+import { Text } from 'react-native';
+import RkComponent from '../rkComponent.js';
 
 /**
  * `RkText` is a component used to render text blocks
@@ -65,21 +60,19 @@ import {RkComponent} from '../rkComponent.js';
  * @property {Text.props} props - All `Text` props also applied to `RkText`
  */
 
-export class RkText extends RkComponent {
+export default class RkText extends RkComponent {
   componentName = 'RkText';
   typeMapping = {
-    text: {}
+    text: {},
   };
 
   render() {
-    let {
-      style,
-      children,
-      ...textProps
-    } = this.props;
+    let { style, children, ...textProps } = this.props;
     let styles = this.defineStyles();
     return (
-      <Text style={[styles.text, style]} {...textProps}>{children}</Text>
+      <Text style={[styles.text, style]} {...textProps}>
+        {children}
+      </Text>
     );
   }
 }
