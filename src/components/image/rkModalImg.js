@@ -274,7 +274,7 @@ export class RkModalImg extends RkComponent {
       source,
       index,
       style: imgStyle,
-      ...imgProps,
+      ...imgProps
     } = this.props;
 
     let {
